@@ -48,7 +48,7 @@ namespace Jwt.Controllers
         }
 
         private string Generate(UserModel user)
-        {
+         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
