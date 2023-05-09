@@ -1,5 +1,6 @@
 ﻿using Jwt.Constants;
 using Jwt.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -59,14 +60,14 @@ namespace Jwt.Controllers
                 new Claim(ClaimTypes.Email, user.EmailAdress),
                 new Claim(ClaimTypes.Role, user.Rol),
                 new Claim(ClaimTypes.Name, user.Fullname),
-                new Claim("addClaim", "probando"),
+                new Claim("addClaim", "probando")
 
             };
 
             // Creacion del token
             var token = new JwtSecurityToken(
-                _config["Jwt: Issuer"],
-                _config["Jwt: Audience"],
+                _config["Jwt:Issuer"],
+                _config["Jwt:Audience"],
                 claims,
                 expires: DateTime.Now.AddMinutes(10),
                 signingCredentials: credentials);
