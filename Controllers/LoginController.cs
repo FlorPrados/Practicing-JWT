@@ -20,6 +20,16 @@ namespace Jwt.Controllers
             _config = config;
         }
 
+        // Método para acceder a los valores del token creado desde el backend (decodifica token) ( this: https://jwt.io )
+        // Es info que puede ser útil para det. requerimientos
+        [HttpGet]
+         public IActionResult Get()
+        {
+            var currentUser = GetCurrentUser();
+            return Ok($"Welcome {currentUser.Fullname} . Your role is {currentUser.Rol} ");
+        }
+
+
         [HttpPost]
         public IActionResult Login(LoginUser loginUser)
         {
@@ -74,5 +84,25 @@ namespace Jwt.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        private UserModel GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if(identity != null)
+            {
+                var userClaims = identity.Claims;
+                return new UserModel
+                {
+                    Username = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    EmailAdress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                    Fullname = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Name)?.Value,
+                    Rol = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
+
+                };
+            }
+            return null;
+        }
+
     }
 }
