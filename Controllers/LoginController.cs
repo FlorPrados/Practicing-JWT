@@ -23,9 +23,11 @@ namespace Jwt.Controllers
         // Método para acceder a los valores del token creado desde el backend (decodifica token) ( this: https://jwt.io )
         // Es info que puede ser útil para det. requerimientos
         [HttpGet]
+        [Authorize]
          public IActionResult Get()
         {
             var currentUser = GetCurrentUser();
+
             return Ok($"Welcome {currentUser.Fullname} . Your role is {currentUser.Rol} ");
         }
 
